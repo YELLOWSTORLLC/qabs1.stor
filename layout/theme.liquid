@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code | default: 'ar' }}" dir="{% if request.locale.iso_code == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <title>{% if page_title %}{{ page_title }}{% else %}{{ shop.name }}{% endif %}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+  <meta name="theme-color" content="{{ settings.color_navy | default: '#12243a' }}">
+  {% if settings.favicon %}<link rel="icon" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">{% endif %}
+  <style>:root{--navy:{{ settings.color_navy | default:'#12243a' }};--ink:{{ settings.color_navy | default:'#12243a' }};--teal:{{ settings.color_teal | default:'#0d8f88' }};--cream:{{ settings.color_cream | default:'#fcfbf8' }};--gold:{{ settings.color_gold | default:'#f4c768' }}}</style>
+  {{ content_for_header }}
+  {{ 'qabs1.css' | asset_url | stylesheet_tag }}
+</head>
+<body class="template-{{ template.name }} qabs-v5">
+  <a class="skip-link" href="#MainContent">تجاوز إلى المحتوى</a>
+  {% sections 'header-group' %}
+  <main id="MainContent" role="main" tabindex="-1">{{ content_for_layout }}</main>
+  {% sections 'footer-group' %}
+  {% render 'whatsapp-float' %}
+  <script>window.QABS1={moneyFormat:{{ shop.money_format | json }},cartUrl:{{ routes.cart_url | json }},rootUrl:{{ routes.root_url | json }}};</script>
+  <script src="{{ 'qabs1.js' | asset_url }}" defer></script>
+</body>
+</html>

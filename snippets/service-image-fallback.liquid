@@ -1,0 +1,25 @@
+{% liquid
+  assign service_asset = 'service-digital-solutions.jpg'
+  if service_key contains 'تأسيس' or service_key contains 'الشركات'
+    assign service_asset = 'service-company-formation.jpg'
+  elsif service_key contains 'رقمي' or service_key contains 'حلول'
+    assign service_asset = 'service-digital-solutions.jpg'
+  elsif service_key contains 'متجر' or service_key contains 'منصات'
+    assign service_asset = 'service-online-stores.jpg'
+  elsif service_key contains 'هوية' or service_key contains 'بصرية'
+    assign service_asset = 'service-branding.jpg'
+  elsif service_key contains 'دفع'
+    assign service_asset = 'service-payment-gateways.jpg'
+  elsif service_key contains 'بنك' or service_key contains 'حسابات'
+    assign service_asset = 'service-business-banking.jpg'
+  elsif service_key contains 'إدارة المتاجر'
+    assign service_asset = 'service-store-management.jpg'
+  elsif service_key contains 'عملاء' or service_key contains 'الدعم'
+    assign service_asset = 'service-customer-support.jpg'
+  elsif service_key contains 'سوشل' or service_key contains 'اجتماعي'
+    assign service_asset = 'service-social-media.jpg'
+  elsif service_key contains 'تمويل'
+    assign service_asset = 'service-ecommerce-finance.jpg'
+  endif
+%}
+<img class="qabs1-service-image" src="{{ service_asset | asset_url }}" alt="{{ alt | default: service_key | escape }}" loading="{{ loading | default: 'lazy' }}" width="1024" height="1024">

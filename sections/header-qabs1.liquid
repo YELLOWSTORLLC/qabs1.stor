@@ -1,0 +1,22 @@
+<div class="announcement">{{ section.settings.announcement }}{% if section.settings.announcement_link != blank %} <a href="{{ section.settings.announcement_link }}">{{ section.settings.announcement_cta }} ←</a>{% endif %}</div>
+<header class="site-header">
+ <div class="container nav">
+  <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+   {% if settings.logo %}{{ settings.logo | image_url: width: 480 | image_tag: class:'brand-image', widths:'100,140,200,280', alt: settings.brand_name | default: shop.name }}{% else %}<span class="logo" aria-hidden="true"></span><span>{{ settings.brand_name | default: section.settings.brand_name | default: shop.name }}</span>{% endif %}
+  </a>
+  <nav class="navlinks" aria-label="التنقل الرئيسي" data-mobile-menu>
+   {% if section.settings.menu != blank %}{% for link in section.settings.menu.links %}<div class="nav-item{% if link.links != blank %} has-children{% endif %}"><a href="{{ link.url }}">{{ link.title }}</a>{% if link.links != blank %}<button class="nav-subtoggle" type="button" aria-label="فتح {{ link.title }}" aria-expanded="false">⌄</button><div class="nav-dropdown">{% for child in link.links %}<a href="{{ child.url }}">{{ child.title }}</a>{% endfor %}</div>{% endif %}</div>{% endfor %}
+   {% else %}<a href="/pages/services">الخدمات</a><a href="/#packages">الأسعار</a><a href="/pages/state-fees">رسوم الولايات</a><a href="/collections/all">المتجر</a><a href="/pages/how-it-works">كيف نعمل</a><a href="/pages/contact">تواصل معنا</a>{% endif %}
+  </nav>
+  <div class="nav-actions">
+   {% if section.settings.show_search %}<a class="icon-link search-link" href="{{ routes.search_url }}" aria-label="البحث">بحث</a>{% endif %}
+   {% if section.settings.show_account %}<a class="icon-link account-link" href="{{ routes.account_url }}" aria-label="الحساب">حسابي</a>{% endif %}
+   <a class="cart-link" href="{{ routes.cart_url }}" aria-label="السلة"><span>السلة</span><b data-cart-count>{{ cart.item_count }}</b></a>
+   <a class="btn btn-primary nav-start" href="{{ section.settings.primary_link | default: '/pages/order' }}">{{ section.settings.primary_label }} ←</a>
+   <button class="menu-btn" type="button" aria-label="فتح القائمة" aria-expanded="false"><span></span></button>
+  </div>
+ </div>
+</header>
+{% schema %}
+{"name":"رأس Qabs1 الكامل","settings":[{"type":"text","id":"brand_name","label":"اسم العلامة","default":"Qabs1"},{"type":"text","id":"announcement","label":"الشريط العلوي","default":"حلول أعمال أوضح، أسرع، ومن مكان واحد"},{"type":"text","id":"announcement_cta","label":"نص رابط الشريط","default":"ابدأ استشارتك مجانًا"},{"type":"url","id":"announcement_link","label":"رابط الشريط"},{"type":"link_list","id":"menu","label":"القائمة الرئيسية"},{"type":"checkbox","id":"show_search","label":"إظهار البحث","default":true},{"type":"checkbox","id":"show_account","label":"إظهار حساب العميل","default":true},{"type":"text","id":"primary_label","label":"الزر الرئيسي","default":"ابدأ الآن"},{"type":"url","id":"primary_link","label":"رابط الزر الرئيسي"}],"presets":[{"name":"رأس Qabs1 الكامل"}]}
+{% endschema %}
