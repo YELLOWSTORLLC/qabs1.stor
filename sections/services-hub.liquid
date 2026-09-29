@@ -1,0 +1,240 @@
+<section class="services-hub-section" id="servicesHub">
+  <div class="container">
+    <div class="services-header">
+      <span class="badge-cat" id="hubBadge">{{ section.settings.kicker | default: 'حلول متكاملة' }}</span>
+      <h1 id="hubTitle">{{ section.settings.heading | default: 'حلول الأعمال والتجارة الشاملة' }}</h1>
+      <p id="hubSubtitle">{{ section.settings.text | default: 'كل ما يلزمك لتأسيس مشروعك، إطلاق متاجرك، وإدارة عملياتك التجارية في مكان واحد.' }}</p>
+    </div>
+
+    <!-- أزرار التصنيف التفاعلية -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="tab-btn active" onclick="filterServicesCategory('all', this)" data-i18n="catAll">جميع الخدمات</button>
+      <button class="tab-btn" onclick="filterServicesCategory('formation', this)" data-i18n="catFormation">تأسيس الشركات</button>
+      <button class="tab-btn" onclick="filterServicesCategory('banking', this)" data-i18n="catBanking">البنوك والمدفوعات</button>
+      <button class="tab-btn" onclick="filterServicesCategory('store', this)" data-i18n="catStores">المتاجر الإلكترونية</button>
+      <button class="tab-btn" onclick="filterServicesCategory('growth', this)" data-i18n="catGrowth">التسويق والإدارة</button>
+    </div>
+
+    <!-- شبكة عرض الخدمات -->
+    <div class="services-grid" id="servicesHubGrid"></div>
+  </div>
+</section>
+
+<!-- شريط المجموع والطلب الفوري عند اختيار خدمة -->
+<div class="summary-bar" id="summaryHubBar">
+  <div class="summary-content container">
+    <div>
+      <span data-i18n="totalSelected">الخدمات المختارة:</span> <strong id="selectedHubCount">0</strong>
+      <span style="margin: 0 10px;">|</span>
+      <span data-i18n="totalCost">الإجمالي:</span> <strong id="totalHubPrice" style="color: var(--primary, #38bdf8); font-size: 1.2rem;">$0</strong>
+    </div>
+    <button class="btn btn-primary" onclick="proceedHubOrder()" data-i18n="btnProceed">متابعة الطلب والدفع 👈</button>
+  </div>
+</div>
+
+<style>
+  .services-hub-section { padding: 50px 0; }
+  .services-header { text-align: center; max-width: 800px; margin: 0 auto 30px; }
+  .services-header h1 { font-size: 2.2rem; margin: 15px 0 10px; color: var(--heading-color, #ffffff); }
+  .services-header p { font-size: 1.1rem; color: #94a3b8; }
+
+  .filter-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 35px; }
+  .tab-btn { padding: 10px 20px; border-radius: 25px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+  .tab-btn.active, .tab-btn:hover { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .service-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease; }
+  .service-card:hover { transform: translateY(-4px); border-color: #38bdf8; }
+
+  .badge-cat { display: inline-block; padding: 4px 10px; border-radius: 12px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; font-size: 0.8rem; font-weight: 700; margin-bottom: 12px; }
+  .service-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: #f8fafc; }
+  .service-desc { color: #94a3b8; font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px; flex-grow: 1; }
+
+  .service-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #334155; padding-top: 16px; margin-top: auto; }
+  .service-price { font-size: 1.2rem; font-weight: 800; color: #38bdf8; }
+
+  .summary-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a; border-top: 1px solid #334155; padding: 16px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); display: none; justify-content: space-between; align-items: center; z-index: 999; }
+  .summary-content { display: flex; justify-content: space-between; align-items: center; width: 100%; color: #f8fafc; }
+</style>
+
+<script>
+  const hubServices = [
+    {
+      id: "llc_starter",
+      category: "formation",
+      price: 199,
+      title_ar: "تأسيس شركة LLC أمريكية",
+      desc_ar: "تسجيل كامل للمنشأة، استخراج الرقم الضريبي الفيدرالي EIN، وعقد التأسيس الرسمي.",
+      title_en: "US LLC Formation",
+      desc_en: "Full business incorporation, official state filing, and federal EIN tax ID issuance."
+    },
+    {
+      id: "registered_agent",
+      category: "formation",
+      price: 99,
+      title_ar: "خدمة الوكيل المعتمد السنوي",
+      desc_ar: "استلام الإخطارات الحكومية السنوية وضمان امتثال شركتك لقوانين الولاية.",
+      title_en: "Registered Agent Service",
+      desc_en: "Yearly registered agent representation and legal compliance mail handling."
+    },
+    {
+      id: "bank_setup",
+      category: "banking",
+      price: 149,
+      title_ar: "فتح حساب بنكي تجاري أمريكي",
+      desc_ar: "تجهيز وتقديم ملفات الشركة لفتح حساب بنكي رقمي (مثل Mercury أو Relay).",
+      title_en: "US Business Bank Account",
+      desc_en: "Preparation and submission of company files for digital business banking."
+    },
+    {
+      id: "stripe_setup",
+      category: "banking",
+      price: 120,
+      title_ar: "تفعيل بوابات الدفع الإلكتروني",
+      desc_ar: "ربط بوابة Stripe وPayPal بالمتجر الإلكتروني لاستقبال أموال العملاء فوراً.",
+      title_en: "Payment Gateways Integration",
+      desc_en: "Complete integration of verified Stripe and PayPal business accounts."
+    },
+    {
+      id: "shopify_custom",
+      category: "store",
+      price: 299,
+      title_ar: "بناء وتصميم متجر شوبيفاي",
+      desc_ar: "تصميم متجر متجاوب مع واجهة ثنائية اللغة وتجهيز المنتجات وبوابات التحويل.",
+      title_en: "Turnkey Shopify Store",
+      desc_en: "Bilingual, high-conversion online store with complete product structure."
+    },
+    {
+      id: "store_management",
+      category: "growth",
+      price: 180,
+      title_ar: "إدارة ونمو المتاجر شهرياً",
+      desc_ar: "متابعة المخزون اليومي، معالجة الطلبات، وتحسين صفحات المبيعات بشكل مستمر.",
+      title_en: "Store Management & Operations",
+      desc_en: "Daily inventory monitoring, order processing, and conversion optimization."
+    },
+    {
+      id: "social_growth",
+      category: "growth",
+      price: 150,
+      title_ar: "إدارة ونمو حسابات التواصل",
+      desc_ar: "خطة محتوى تفاعلية وإعلانات موجهة لجلب زوار مهتمين لمتجرك الإلكتروني.",
+      title_en: "Social Media Growth",
+      desc_en: "Targeted content creation and ad campaigns to drive qualified buyer traffic."
+    }
+  ];
+
+  let currentHubFilter = 'all';
+  let selectedHubServices = new Set();
+
+  function filterServicesCategory(category, button) {
+    currentHubFilter = category;
+    document.querySelectorAll('#filterTabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+    if(button) button.classList.add('active');
+    renderHubServices();
+  }
+
+  function renderHubServices() {
+    const grid = document.getElementById('servicesHubGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const filtered = currentHubFilter === 'all'
+      ? hubServices
+      : hubServices.filter(s => s.category === currentHubFilter);
+
+    filtered.forEach(service => {
+      const isSelected = selectedHubServices.has(service.id);
+
+      const card = document.createElement('div');
+      card.className = 'service-card';
+      card.innerHTML = `
+        <div>
+          <span class="badge-cat">${service.category.toUpperCase()}</span>
+          <div class="service-title">${service.title_ar}</div>
+          <div class="service-desc">${service.desc_ar}</div>
+        </div>
+        <div class="service-footer">
+          <span class="service-price">$${service.price}</span>
+          <button class="btn ${isSelected ? 'btn-outline' : 'btn-primary'}"
+                  onclick="toggleSelectHubService('${service.id}')">
+            ${isSelected ? 'تمت الإضافة ✓' : 'إضافة للطلب +'}
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    updateHubSummaryBar();
+  }
+
+  function toggleSelectHubService(id) {
+    if (selectedHubServices.has(id)) {
+      selectedHubServices.delete(id);
+    } else {
+      selectedHubServices.add(id);
+    }
+    renderHubServices();
+  }
+
+  function updateHubSummaryBar() {
+    const bar = document.getElementById('summaryHubBar');
+    const countEl = document.getElementById('selectedHubCount');
+    const priceEl = document.getElementById('totalHubPrice');
+
+    if (!bar) return;
+
+    if (selectedHubServices.size > 0) {
+      bar.style.display = 'flex';
+      countEl.textContent = selectedHubServices.size;
+
+      let total = 0;
+      hubServices.forEach(s => {
+        if (selectedHubServices.has(s.id)) total += s.price;
+      });
+      priceEl.textContent = `$${total}`;
+    } else {
+      bar.style.display = 'none';
+    }
+  }
+
+  function proceedHubOrder() {
+    const selectedList = Array.from(selectedHubServices).join(', ');
+    window.location.href = '/pages/order?services=' + encodeURIComponent(selectedList);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderHubServices();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "مركز الخدمات الشاملة",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "الشارة",
+      "default": "حلول متكاملة"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "العنوان الرئيسي",
+      "default": "حلول الأعمال والتجارة الشاملة"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "الوصف",
+      "default": "كل ما يلزمك لتأسيس مشروعك، إطلاق متاجرك، وإدارة عملياتك التجارية في مكان واحد."
+    }
+  ],
+  "presets": [
+    {
+      "name": "مركز الخدمات الشاملة"
+    }
+  ]
+}
+{% endschema %}

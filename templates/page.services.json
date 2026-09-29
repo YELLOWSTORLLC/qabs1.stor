@@ -1,1 +1,1 @@
-{"sections":{"services":{"type":"services-grid","settings":{}},"catalog":{"type":"product-catalog-v4","settings":{"kicker":"الخدمات القابلة للدفع","heading":"اختر الخدمة المناسبة","text":"منتجات Shopify حقيقية بأسعار واضحة وصور مخصصة لكل خدمة.","limit":12,"button_label":"عرض جميع الخدمات","collection":"all"}}},"order":["services","catalog"]}
+{"sections":{"hub":{"type":"services-hub","settings":{}},"faq":{"type":"faq-v5","settings":{}}},"order":["hub","faq"]}
