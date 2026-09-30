@@ -2,7 +2,7 @@
 <header class="site-header">
  <div class="container nav">
   <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
-   {% if settings.logo %}{{ settings.logo | image_url: width: 480 | image_tag: class:'brand-image', widths:'100,140,200,280', alt: settings.brand_name | default: shop.name }}{% else %}<span class="logo" aria-hidden="true"></span><span>{{ settings.brand_name | default: section.settings.brand_name | default: shop.name }}</span>{% endif %}
+   {% if settings.logo %}{{ settings.logo | image_url: width: 480 | image_tag: class:'brand-image', widths:'100,140,200,280', loading: 'eager', alt: settings.brand_name | default: shop.name }}{% else %}<span class="logo" aria-hidden="true"></span><span>{{ settings.brand_name | default: section.settings.brand_name | default: shop.name }}</span>{% endif %}
   </a>
   <nav class="navlinks" aria-label="التنقل الرئيسي" data-mobile-menu>
    {% if section.settings.menu != blank %}{% for link in section.settings.menu.links %}<div class="nav-item{% if link.links != blank %} has-children{% endif %}"><a href="{{ link.url }}">{{ link.title }}</a>{% if link.links != blank %}<button class="nav-subtoggle" type="button" aria-label="فتح {{ link.title }}" aria-expanded="false">⌄</button><div class="nav-dropdown">{% for child in link.links %}<a href="{{ child.url }}">{{ child.title }}</a>{% endfor %}</div>{% endif %}</div>{% endfor %}
