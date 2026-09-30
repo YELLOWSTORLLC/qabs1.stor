@@ -36,4 +36,5 @@
     assign image_asset = 'product-annual-compliance.jpg'
   endif
 %}
-<img class="qabs1-fallback-image" src="{{ image_asset | asset_url }}" alt="{{ alt | escape }}" loading="lazy" width="1024" height="1024">
+{% comment %} Bolt: Allow eager loading when requested (e.g. main product image LCP optimization) {% endcomment %}
+<img class="qabs1-fallback-image" src="{{ image_asset | asset_url }}" alt="{{ alt | escape }}" loading="{{ loading | default: 'lazy' }}" width="1024" height="1024">
