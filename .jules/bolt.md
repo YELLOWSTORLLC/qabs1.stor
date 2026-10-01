@@ -1,0 +1,3 @@
+## 2025-10-01 - Preloading LCP Hero Image in Shopify Liquid Layout
+**Learning:** Preloading the main above-the-fold hero image (`qabs1-hero.jpg`) with `<link rel="preload" as="image" href="..." fetchpriority="high">` inside `layout/theme.liquid` specifically for `template.name == 'index'` reduces Largest Contentful Paint (LCP) resource load delay significantly by bypassing browser parser discovery delays for theme asset images.
+**Action:** When optimizing Shopify custom themes, identify static critical hero assets in Liquid sections and add conditional `<link rel="preload">` resource hints in `<head>` for homepage templates.
