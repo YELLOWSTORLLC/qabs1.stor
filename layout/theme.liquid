@@ -10,6 +10,10 @@
   <style>:root{--navy:{{ settings.color_navy | default:'#12243a' }};--ink:{{ settings.color_navy | default:'#12243a' }};--teal:{{ settings.color_teal | default:'#0d8f88' }};--cream:{{ settings.color_cream | default:'#fcfbf8' }};--gold:{{ settings.color_gold | default:'#f4c768' }}}</style>
   {{ content_for_header }}
   {{ 'qabs1.css' | asset_url | stylesheet_tag }}
+  {% comment %}⚡ Bolt: Preload LCP hero image on home page to accelerate critical asset discovery and rendering{% endcomment %}
+  {% if template.name == 'index' %}
+    <link rel="preload" as="image" href="{{ 'qabs1-hero.jpg' | asset_url }}" fetchpriority="high">
+  {% endif %}
 </head>
 <body class="template-{{ template.name }} qabs-v5">
   <a class="skip-link" href="#MainContent">تجاوز إلى المحتوى</a>
