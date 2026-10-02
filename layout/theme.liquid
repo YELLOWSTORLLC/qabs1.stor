@@ -2,6 +2,8 @@
 <html lang="{{ request.locale.iso_code | default: 'ar' }}" dir="{% if request.locale.iso_code == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Performance: Preconnect to Shopify CDN to eliminate DNS and TLS setup overhead for asset requests -->
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="canonical" href="{{ canonical_url }}">
   <title>{% if page_title %}{{ page_title }}{% else %}{{ shop.name }}{% endif %}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
