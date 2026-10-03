@@ -36,4 +36,8 @@
     assign image_asset = 'product-annual-compliance.jpg'
   endif
 %}
-<img class="qabs1-fallback-image" src="{{ image_asset | asset_url }}" alt="{{ alt | escape }}" loading="lazy" width="1024" height="1024">
+{% comment %}
+  Performance optimization: Allow dynamic loading ('lazy' or 'eager') and fetchpriority ('auto' or 'high').
+  Default to loading="lazy" and fetchpriority="auto" for collection grids, but support loading="eager" and fetchpriority="high" on main product pages to eliminate LCP delay.
+{% endcomment %}
+<img class="qabs1-fallback-image" src="{{ image_asset | asset_url }}" alt="{{ alt | escape }}" loading="{{ loading | default: 'lazy' }}" fetchpriority="{{ fetchpriority | default: 'auto' }}" width="1024" height="1024">
